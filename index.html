@@ -1,8 +1,39 @@
 <html>
     <head>
-
+        <style>
+            html {
+                /* background-color: aqua !important; */
+            }
+            body {
+                color: black;
+                /* background-color: greenyellow !important;  */
+            }
+            h1 {
+                color: lightblue;
+                font-size: 50px;
+            }
+            .text-1 {
+                color: red;
+            }
+            .text-2 {
+                color: gold;
+            }
+        </style>
     </head>
     <body>
-        <h1>Hello World!!!</h1>
+        <h1 id="text" class="text-2">Hello World!!!</h1>
+        hello my name is <strong>cha yun ho</strong>
+        <script type="text/javascript">
+            var elem = document.getElementById('text');
+            setInterval(function() {
+                if (elem.className === 'text-2') {
+                    elem.className = 'text-1';
+                    elem.innerText = "Let's play";
+                } else {
+                    elem.className = 'text-2';
+                    elem.innerText = "Brain training";
+                }
+            }, 500);
+        </script>
     </body>
 </html>
