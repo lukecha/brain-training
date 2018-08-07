@@ -29,22 +29,22 @@
             <a href="board.html">Board</a>
         </div>
         <ul id="list"></ul>
-        <input type="text" id="input" maxlength="33">
-        <button id="btn">enter/입력</button>
+        <input type="text" id="input" maxlength="33" style="position:absolute; bottom:0;left:0;right:0;width:100%">
+        <!-- <button id="btn">enter/입력</button> -->
         <script>
             var input = document.getElementById('input');
-            var button = document.getElementById("btn");
+            // var button = document.getElementById("btn");
             var list = document.getElementById("list");
             // button.style.color = "red";
-            button.addEventListener('click', function() {
-                // list.innerHTML = input.value
-                var li = document.createElement("li");
-                li.innerHTML = input.value;
-                list.appendChild(li);
-                input.value = "";
-            });
+            // button.addEventListener('click', function() {
+            //     // list.innerHTML = input.value
+            //     var li = document.createElement("li");
+            //     li.innerHTML = input.value;
+            //     list.appendChild(li);
+            //     input.value = "";
+            // });
             input.addEventListener('keydown', function(event) {
-                if (event.keyCode === 13) {
+                if (event.keyCode === 13 && input.value.trim() !== '') {
                     var li = document.createElement("li");
                     li.innerHTML = input.value;
                     list.appendChild(li);
