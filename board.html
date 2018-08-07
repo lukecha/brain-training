@@ -24,6 +24,19 @@
         </style>
     </head>
     <body>
+        <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
+        <script>
+            // Initialize Firebase
+            var config = {
+            apiKey: "AIzaSyDf370umgxy9nqdYKRHv6HVU9F9LTBoiMk",
+            authDomain: "brain-training-66533.firebaseapp.com",
+            databaseURL: "https://brain-training-66533.firebaseio.com",
+            projectId: "brain-training-66533",
+            storageBucket: "brain-training-66533.appspot.com",
+            messagingSenderId: "81974705610"
+            };
+            firebase.initializeApp(config);
+        </script>
         <div>
             <a href="index.html">Home</a>
             <a href="board.html">Board</a>
@@ -45,10 +58,19 @@
             // });
             input.addEventListener('keydown', function(event) {
                 if (event.keyCode === 13 && input.value.trim() !== '') {
-                    var li = document.createElement("li");
-                    li.innerHTML = input.value;
-                    list.appendChild(li);
-                    input.value = "";  
+                    // var li = document.createElement("li");
+                    // li.innerHTML = input.value;
+                    // list.appendChild(li);
+                    // input.value = "";  
+
+                    // Get a key for a new Post.
+                    var newPostKey = firebase.database().ref('posts').push().key;
+
+                    // Write the new post's data simultaneously in the posts list and the user's post list.
+                    firebase.database().ref().update({
+                        ['posts/' + newPostKey]: input.value.trim(),
+                    });
+                    input.value = "";
                 }
                 // list.innerHTML = input.value
                 // var li = document.createElement("li");
@@ -56,6 +78,19 @@
                 // list.appendChild(li);
                 // input.value = "";
             });
+
+            var starCountRef = firebase.database().ref('posts');
+            starCountRef.on('value', function(snapshot) {
+                var posts = snapshot.val();
+                list.innerHTML = '';
+                posts = Object.keys(posts).map(function(key) {
+                    // console.log(key, posts[key]);
+                    var li = document.createElement("li");
+                    li.innerHTML = posts[key];
+                    list.appendChild(li);                    
+                });
+                // console.log(posts);
+            });            
 
 
         </script>
