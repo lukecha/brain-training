@@ -41,10 +41,17 @@
             <a href="index.html">Home</a>
             <a href="board.html">Board</a>
         </div>
+        <input id="name" type="text" maxlength="21">
         <ul id="list"></ul>
         <input type="text" id="input" maxlength="33" style="position:absolute; bottom:0;left:0;right:0;width:100%">
         <!-- <button id="btn">enter/입력</button> -->
         <script>
+
+            
+
+            var inputName = document.getElementById("name");
+            inputName.value = "가즈아" + Math.ceil((Math.random() * 200));
+
             var input = document.getElementById('input');
             // var button = document.getElementById("btn");
             var list = document.getElementById("list");
@@ -68,8 +75,13 @@
 
                     // Write the new post's data simultaneously in the posts list and the user's post list.
                     firebase.database().ref().update({
-                        ['posts/' + newPostKey]: input.value.trim(),
+                        ['posts/' + newPostKey]: {
+                            user: inputName.value.trim(),
+                            message: input.value.trim(),
+                        }
                     });
+
+                    document.cookie = inputName.value.trim();
                     input.value = "";
                 }
                 // list.innerHTML = input.value
@@ -81,16 +93,18 @@
 
             var starCountRef = firebase.database().ref('posts');
             starCountRef.on('value', function(snapshot) {
-                var posts = snapshot.val();
+                var posts = snapshot.val() || {};
                 list.innerHTML = '';
-                posts = Object.keys(posts).map(function(key) {
+                posts = Object.keys(posts).map(function(key) 
+                {
                     // console.log(key, posts[key]);
                     var li = document.createElement("li");
-                    li.innerHTML = posts[key];
+                    li.innerHTML = posts[key].user + ': ' + posts[key].message;
                     list.appendChild(li);                    
                 });
                 // console.log(posts);
             });            
+
 
 
         </script>
