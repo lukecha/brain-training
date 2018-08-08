@@ -50,7 +50,11 @@
             
 
             var inputName = document.getElementById("name");
-            inputName.value = "가즈아" + Math.ceil((Math.random() * 200));
+            if (document.cookie) {
+                inputName.value = document.cookie;
+            } else {
+                inputName.value = "가즈아" + Math.ceil((Math.random() * 200));
+            }
 
             var input = document.getElementById('input');
             // var button = document.getElementById("btn");
