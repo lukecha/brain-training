@@ -95,6 +95,10 @@
             }
 
             input.addEventListener('keydown', function(event) {
+                if (event.keyCode === 86 && event,ctrlKey) {
+                    event.preventDefault();
+                    return;
+                }
                 if (event.keyCode === 13 && input.value.trim() !== '') {
                     // var li = document.createElement("li");
                     // li.innerHTML = input.value;
