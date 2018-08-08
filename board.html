@@ -1,6 +1,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Rammetto+One" rel="stylesheet">
         <style>
             html {
@@ -41,9 +42,17 @@
             <a href="index.html">Home</a>
             <a href="board.html">Board</a>
         </div>
-        <input id="name" type="text" maxlength="21">
-        <ul id="list"></ul>
-        <input type="text" id="input" maxlength="33" style="position:absolute; bottom:0;left:0;right:0;width:100%">
+        
+        <ul id="list" style="margin-bottom: 40px"></ul>
+
+        <div class="input-group mb-3" style="position:fixed; bottom:0; left: 0; right: 0; margin-bottom:0 !important">
+            <input class="form-control" id="name" type="text" maxlength="21" style="flex:0.5 1 auto">
+            <input class="form-control" type="text" id="input" maxlength="33">
+            <div class="input-group-append">
+                <button id="btn" class="btn btn-outline-secondary" type="button" id="button-addon2">Enter</button>
+            </div>
+        </div>        
+        
         <!-- <button id="btn">enter/입력</button> -->
         <script>
 
@@ -57,36 +66,41 @@
             }
 
             var input = document.getElementById('input');
-            // var button = document.getElementById("btn");
+            var button = document.getElementById("btn");
             var list = document.getElementById("list");
             // button.style.color = "red";
-            // button.addEventListener('click', function() {
-            //     // list.innerHTML = input.value
-            //     var li = document.createElement("li");
-            //     li.innerHTML = input.value;
-            //     list.appendChild(li);
-            //     input.value = "";
-            // });
+            button.addEventListener('click', function() {
+                // list.innerHTML = input.value
+                // var li = document.createElement("li");
+                // li.innerHTML = input.value;
+                // list.appendChild(li);
+                // input.value = "";
+                sendMessage();
+            });
+
+            function sendMessage() {
+                // Get a key for a new Post.
+                var newPostKey = firebase.database().ref('posts').push().key;
+
+                // Write the new post's data simultaneously in the posts list and the user's post list.
+                firebase.database().ref().update({
+                    ['posts/' + newPostKey]: {
+                        user: inputName.value.trim(),
+                        message: input.value.trim(),
+                    }
+                });
+
+                document.cookie = inputName.value.trim();
+                input.value = "";
+            }
+
             input.addEventListener('keydown', function(event) {
                 if (event.keyCode === 13 && input.value.trim() !== '') {
                     // var li = document.createElement("li");
                     // li.innerHTML = input.value;
                     // list.appendChild(li);
                     // input.value = "";  
-
-                    // Get a key for a new Post.
-                    var newPostKey = firebase.database().ref('posts').push().key;
-
-                    // Write the new post's data simultaneously in the posts list and the user's post list.
-                    firebase.database().ref().update({
-                        ['posts/' + newPostKey]: {
-                            user: inputName.value.trim(),
-                            message: input.value.trim(),
-                        }
-                    });
-
-                    document.cookie = inputName.value.trim();
-                    input.value = "";
+                    sendMessage();
                 }
                 // list.innerHTML = input.value
                 // var li = document.createElement("li");
@@ -106,6 +120,7 @@
                     li.innerHTML = posts[key].user + ': ' + posts[key].message;
                     list.appendChild(li);                    
                 });
+                window.scrollTo(0, document.documentElement.clientHeight);
                 // console.log(posts);
             });            
 
